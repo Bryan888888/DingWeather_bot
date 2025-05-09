@@ -1,0 +1,8 @@
+services:
+  - type: cron
+    name: weather-dingtalk-cron
+    schedule: "0 * * * *"
+    env: python
+    plan: free
+    buildCommand: ""
+    startCommand: python weather_bot.py

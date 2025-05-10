@@ -111,7 +111,7 @@ def build_message(now_data, future_hours, alert_data, air_quality_data):
 
     lines = []
     lines.append("如皋实时天气：")
-    lines.append(f"{text} {emoji}{temp}°C，相对湿度{humidity}%，露点{dew}°C")
+    lines.append(f"{emoji} {text}{temp}°C，相对湿度{humidity}%，露点{dew}°C")
     lines.append(f"空气质量|{aqi_category}（AQI {aqi}）")
     lines.append("──────────")
 
@@ -151,11 +151,8 @@ def send_to_dingtalk(msg: str):
         params["sign"] = sign_request(ts, DINGTALK_SECRET)
 
     body = {
-        "msgtype": "markdown",
-        "markdown": {
-            "title": "如皋天气播报",
-            "text": msg
-        }
+        "msgtype": "text",
+        "text": {"content": msg}
     }
 
     resp = requests.post(url, params=params, json=body, headers=headers, timeout=5)

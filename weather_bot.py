@@ -104,27 +104,32 @@ def build_message(now_data, future_hours, alert_data, air_quality_data):
     aqi = air_now.get("aqi", "N/A")
 
     lines = []
-    lines.append(f"如皋实时天气")
-    lines.append(f"{text} {emoji}{temp}°C,相对湿度{humidity}%")
-    lines.append(f"露点{dew}°C,空气质量|{aqi_category}（AQI{aqi}）")
-    lines.append(f"---")
 
-    lines.append(f"🕖未来4小时预报")
+    # 实时天气段落
+    lines.append("**如皋实时天气**")
+    lines.append(f"{text} {emoji} {temp}°C，相对湿度 {humidity}%")
+    lines.append(f"露点 {dew}°C，空气质量：{aqi_category}（AQI {aqi}）")
+    lines.append("------")
+
+    # 未来4小时预报
+    lines.append("🕖 未来4小时预报")
     for h in future_hours:
         t = format_time_bj(h["fxTime"])
         lines.append(f"- {t}：{h['text']} | {h['temp']}°C，湿度 {h['humidity']}%")
-    lines.append(f"---")
+    lines.append("------")
 
+    # 天气预警
     alerts = alert_data.get("warning", [])
     if alerts:
-        lines.append(f"🚨天气预警")
+        lines.append("🚨 天气预警")
         for a in alerts:
             desc = a.get("text", "").replace('\n', ' ')
             lines.append(f"- {desc}")
     else:
-        lines.append(f"🌞无天气预警")
+        lines.append("🌞 无天气预警")
 
     return "\n".join(lines)
+
 
 def sign_request(timestamp, secret):
     string_to_sign = f"{timestamp}\n{secret}"

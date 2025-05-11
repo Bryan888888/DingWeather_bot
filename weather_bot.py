@@ -110,25 +110,25 @@ def build_message(now_data, future_hours, alert_data, air_quality_data):
     aqi = air_now.get("aqi", "N/A")
 
     lines = []
-    lines.append("如皋实时天气：")
-    lines.append(f"{emoji} {text}{temp}°C，相对湿度{humidity}%，露点{dew}°C")
-    lines.append(f"空气质量|{aqi_category}（AQI {aqi}）")
-    lines.append("──────────")
+    lines.append(f"如皋实时天气")
+    lines.append(f"{text} {emoji}{temp}°C,相对湿度{humidity}%")
+    lines.append(f"露点{dew}°C,空气质量:{aqi_category}（AQI{aqi}）")
+    lines.append(f"---")
 
-    lines.append("🕖️未来4小时预报：")
+    lines.append(f"🕖未来4小时预报")
     for h in future_hours:
         t = format_time_bj(h["fxTime"])
-        lines.append(f"{t}-{h['text']}|{h['temp']}°C，湿度{h['humidity']}%")
-    lines.append("──────────")
+        lines.append(f"- {t}：{h['text']} | {h['temp']}°C，湿度 {h['humidity']}%")
+    lines.append(f"---")
 
     alerts = alert_data.get("warning", [])
     if alerts:
-        lines.append("🚨天气预警：")
+        lines.append(f"🚨天气预警")
         for a in alerts:
             desc = a.get("text", "").replace('\n', ' ')
-            lines.append(desc)
+            lines.append(f"- {desc}")
     else:
-        lines.append("🌞无天气预警")
+        lines.append(f"🌞无天气预警")
 
     return "\n".join(lines)
 
@@ -151,8 +151,11 @@ def send_to_dingtalk(msg: str):
         params["sign"] = sign_request(ts, DINGTALK_SECRET)
 
     body = {
-        "msgtype": "text",
-        "text": {"content": msg}
+        "msgtype": "markdown",
+        "markdown": {
+            "title": "如皋天气播报",
+            "text": msg
+        }
     }
 
     resp = requests.post(url, params=params, json=body, headers=headers, timeout=5)

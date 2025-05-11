@@ -106,7 +106,7 @@ def build_message(now_data, future_hours, alert_data, air_quality_data):
     lines = []
     lines.append(f"如皋实时天气")
     lines.append(f"{text} {emoji}{temp}°C,相对湿度{humidity}%")
-    lines.append(f"露点{dew}°C,空气质量:{aqi_category}（AQI{aqi}）")
+    lines.append(f"露点{dew}°C,空气质量|{aqi_category}（AQI{aqi}）")
     lines.append(f"---")
 
     lines.append(f"🕖未来4小时预报")

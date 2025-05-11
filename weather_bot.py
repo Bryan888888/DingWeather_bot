@@ -10,18 +10,12 @@ from dateutil import parser
 
 # ------ 配置部分 ------
 QWEATHER_HOST = os.getenv("QWEATHER_HOST", "https://mu5pwc6q8d.re.qweatherapi.com")
-QWEATHER_API_KEY = os.getenv("QWEATHER_API_KEY", "ecf818ea29f1491faeee08f860ab8573")
-LOCATION = os.getenv("LOCATION", "120.56,32.39")  # 江苏如皋坐标
+QWEATHER_API_KEY = os.environ["QWEATHER_API_KEY"]
+LOCATION = os.environ["LOCATION"]
 
-DINGTALK_WEBHOOK = os.getenv(
-    "DINGTALK_WEBHOOK",
-    "https://oapi.dingtalk.com/robot/send?access_token=fc18ee89d0d862b9ce3e6a4071b396b8f41a3f103fd9a5620d45ba81c94c44da"
-)
-DINGTALK_SECRET = os.getenv(
-    "DINGTALK_SECRET",
-    "SECc6f568f3a5374e96f7bc191f832f7d7ef88326412a8883e5c60c14c132736e99"
-)
-# ---------------------
+DINGTALK_WEBHOOK = os.environ["DINGTALK_WEBHOOK"]
+DINGTALK_SECRET = os.environ["DINGTALK_SECRET"]
+# ----------------------
 
 def get_now_weather():
     url = f"{QWEATHER_HOST}/v7/weather/now"

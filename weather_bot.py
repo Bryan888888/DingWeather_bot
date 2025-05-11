@@ -106,7 +106,7 @@ def build_message(now_data, future_hours, alert_data, air_quality_data):
     lines = []
 
     # 实时天气段落
-    lines.append("**如皋实时天气**")
+    lines.append("如皋实时天气\n")
     lines.append(f"{text} {emoji} {temp}°C，相对湿度 {humidity}%")
     lines.append(f"露点 {dew}°C，空气质量：{aqi_category}（AQI {aqi}）")
     lines.append("------")
@@ -129,7 +129,6 @@ def build_message(now_data, future_hours, alert_data, air_quality_data):
         lines.append("🌞 无天气预警")
 
     return "\n".join(lines)
-
 
 def sign_request(timestamp, secret):
     string_to_sign = f"{timestamp}\n{secret}"

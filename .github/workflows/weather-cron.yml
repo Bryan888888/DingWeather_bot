@@ -2,7 +2,7 @@ name: Scheduled Weather Bot
 
 on:
   schedule:
-    - cron: '0 */4 * * *'       # 每1小时运行一次（UTC）
+    - cron: '0 */6 * * *'       # 每6小时运行一次（UTC）
   workflow_dispatch:         # 允许手动触发
 
 jobs:

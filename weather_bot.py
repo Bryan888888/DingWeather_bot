@@ -108,7 +108,7 @@ def build_message(now_data, future_hours, alert_data, air_quality_data):
     # 实时天气段落
     lines.append("**如皋实时天气**")  # 去掉列表符号，与未来4小时标题保持一致
     lines.append(f"- {text} {emoji} {temp}°C，相对湿度 {humidity}%")
-    lines.append(f"- 露点 {dew}°C，空气质量{aqi_category}AQI{aqi}")
+    lines.append(f"- 露点 {dew}°C，空气质量{aqi_category} AQI{aqi}")
     lines.append("------")
 
     # 未来4小时预报

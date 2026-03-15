@@ -172,7 +172,6 @@ def water_ac_advice(temp, humidity, dew):
 
         if humidity >= 75:
            return (
-            "💧空调系统建议\n"
             "风量：小（或关闭）\n"
             "水量：关\n"
             "外窗：小（或关闭）\n"
@@ -181,7 +180,6 @@ def water_ac_advice(temp, humidity, dew):
            )
 
     return (
-        "💧空调系统建议\n"
         "风量：小（或关闭）\n"
         "水量：小（或关闭）\n"
         "外窗：小（或关闭）\n"
@@ -191,7 +189,6 @@ def water_ac_advice(temp, humidity, dew):
 
     if humidity >= 80 or dew >= 26:
         return (
-            "💧空调系统建议\n"
             "风量：大\n"
             "水量：关\n"
             "外窗：小\n"
@@ -201,7 +198,6 @@ def water_ac_advice(temp, humidity, dew):
 
     if efficiency == "高":
         return (
-            "💧空调系统建议\n"
             "风量：高\n"
             "水量：高\n"
             "外窗：开\n"
@@ -211,7 +207,6 @@ def water_ac_advice(temp, humidity, dew):
 
     if efficiency == "中":
         return (
-            "💧空调系统建议\n"
             "风量：高\n"
             "水量：中\n"
             "外窗：半开\n"
@@ -220,7 +215,6 @@ def water_ac_advice(temp, humidity, dew):
         )
 
     return (
-        "💧空调系统建议\n"
         "风量：中\n"
         "水量：小\n"
         "外窗：开\n"
@@ -233,30 +227,23 @@ def floor_vent_advice(temp):
 
     temp = float(temp)
 
-    if temp >= 32:
+    if temp >= 30:
         return (
-            "♨️地（热）排风建议\n"
-            "模式：排热\n"
+            "模式：排热（设备热量通过地排或管道排出）\n"
             "地排：开\n"
             "热风窗：开\n"
-            "说明：设备热量通过地排排出"
         )
 
     if temp <= 10:
         return (
-            "♨️地（热）排风建议\n"
-            "模式：循环\n"
+            "模式：循环（热空气进入水帘房加湿后回送车间）\n"
             "地排：开\n"
             "热风窗：关\n"
-            "说明：热空气进入水帘房加湿后回送车间"
         )
 
     return (
-        "♨️地（热）排风建议\n"
-        "模式：通风\n"
-        "地排：中\n"
-        "热风窗：开\n"
-        "说明：维持空气循环"
+        "模式：通风排热（维持空气循环）\n"
+        "地排：视车间温湿度情况开启\n"
     )
 
 
@@ -265,9 +252,7 @@ def floor_vent_advice(temp):
 # =========================
 
 def build_message(now_data, future_hours, alert_data, air_quality_data):
-
     now = now_data.get("now", {})
-
     icon = now.get("icon", "999")
     emoji = icon_to_emoji(icon)
 
@@ -282,49 +267,44 @@ def build_message(now_data, future_hours, alert_data, air_quality_data):
 
     lines = []
 
+    # 实时天气
     lines.append("**如皋实时天气**")
     lines.append(f"- {text} {emoji} {temp}°C，相对湿度 {humidity}%")
-    lines.append(f"- 露点 {dew}°C，空气质量{aqi_category} AQI{aqi}")
-
+    lines.append(f"- 露点 {dew}°C，空气质量 {aqi_category} AQI {aqi}")
     lines.append("------")
 
-    lines.append("🕖 未来4小时预报")
-
+    # 未来4小时预报
+    lines.append("🕖未来4小时预报")
     for h in future_hours:
-
         t = format_time_bj(h["fxTime"])
-
-        lines.append(
-            f"- {t}：{h['text']} | {h['temp']}°C，湿度 {h['humidity']}%"
-        )
-
+        lines.append(f"- {t}：{h['text']} | {h['temp']}°C，湿度 {h['humidity']}%")
     lines.append("------")
 
+    # 天气预警
     alerts = alert_data.get("warning", [])
-
     if alerts:
-
         lines.append("🚨天气预警")
-
         for a in alerts:
-
             desc = a.get("text", "").replace('\n', ' ')
             lines.append(f"- {desc}")
-
     else:
-
         lines.append("🌞无天气预警")
+    lines.append("------")
 
-    # ===== 新增建议 =====
-
+    # 空调建议
     ac_advice = water_ac_advice(temp, humidity, dew)
+    lines.append("💧水空调建议")
+    advice_lines = ac_advice.split("\n")
+    for line in advice_lines:
+        lines.append(f"- {line}")
+    lines.append("------")
+
+    # 地排风建议
     floor_advice = floor_vent_advice(temp)
-
-    lines.append("------")
-    lines.append(ac_advice)
-
-    lines.append("------")
-    lines.append(floor_advice)
+    lines.append("♨️地(热)排风建议")
+    floor_lines = floor_advice.split("\n")
+    for line in floor_lines:
+        lines.append(f"- {line}")
 
     return "\n".join(lines)
 

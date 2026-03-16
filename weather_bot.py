@@ -172,41 +172,47 @@ def water_ac_advice(temp, humidity, dew):
 
         if humidity >= 75:
             return (
-                "风量：小或关闭 | 水量：关 | 外窗：小或关闭 | 内窗：大\n"
-                f"原因：外部湿度过高，蒸发加湿会导致湿度累积；风机功率建议：{pct}%（约{kw}kW）"
+                "风量：小或关闭 | 水量：关\n"
+                "外窗：小或关闭 | 内窗：大\n"
+                f"原因：外部湿度过高，蒸发加湿会导致湿度累积；风机功率建议{pct}%"
             )
 
         else:
             return (
-                "风量：小 | 水量：小 | 外窗：小 | 内窗：大\n"
-                f"原因：冬季空气干燥，可利用余热循环加湿；风机功率建议：{pct}%（约{kw}kW）"
+                "风量：小 | 水量：小\n"
+                "外窗：小 | 内窗：大\n"
+                f"原因：冬季空气干燥，可利用余热循环加湿；风机功率建议{pct}%"
             )
 
     # ===== 高湿度保护 =====
     if humidity >= 80 or dew >= 26:
         return (
-            "风量：大 | 水量：关 | 外窗：小 | 内窗：大\n"
-            f"原因：空气湿度过高，喷淋必须关闭防止结露；风机功率建议：{pct}%（约{kw}kW）"
+            "风量：大 | 水量：关\n"
+            "外窗：小 | 内窗：大\n"
+            f"原因：空气湿度过高，喷淋必须关闭防止结露；风机功率建议{pct}%"
         )
 
     # ===== 蒸发效率高 =====
     if efficiency == "高":
         return (
-            "风量：高 | 水量：高 | 外窗：开 | 内窗：小\n"
-            f"原因：蒸发效率高，适合最大制冷；风机功率建议：{pct}%（约{kw}kW）"
+            "风量：高 | 水量：高\n"
+            "外窗：开 | 内窗：小\n"
+            f"原因：蒸发效率高，适合最大制冷；风机功率建议{pct}%"
         )
 
     # ===== 蒸发效率中 =====
     if efficiency == "中":
         return (
-            "风量：高 | 水量：中 | 外窗：半开 | 内窗：中\n"
-            f"原因：蒸发效率一般；风机功率建议：{pct}%（约{kw}kW）"
+            "风量：高 | 水量：中\n"
+            "外窗：半开 | 内窗：中\n"
+            f"原因：蒸发效率一般；风机功率建议{pct}%"
         )
 
     # ===== 蒸发效率低 =====
     return (
-        "风量：中 | 水量：小 | 外窗：开 | 内窗：中\n"
-        f"原因：蒸发效率较低；风机功率建议：{pct}%（约{kw}kW）"
+        "风量：中 | 水量：小\n"
+        "外窗：开 | 内窗：中\n"
+        f"原因：蒸发效率较低；风机功率建议{pct}%"
     )
 
 def floor_vent_advice(temp):
@@ -280,7 +286,7 @@ def build_message(now_data, future_hours, alert_data, air_quality_data):
     
     # 空调建议
     ac_advice = water_ac_advice(temp, humidity, dew)
-    lines.append("💧水空调建议")
+    lines.append("💧空调系统建议")
     advice_lines = ac_advice.split("\n")
     for line in advice_lines:
         lines.append(f"- {line}")
@@ -288,7 +294,7 @@ def build_message(now_data, future_hours, alert_data, air_quality_data):
 
     # 地排风建议
     floor_advice = floor_vent_advice(temp)
-    lines.append("♨️地(热)排风建议")
+    lines.append("♨️排热系统建议")
     floor_lines = floor_advice.split("\n")
     for line in floor_lines:
         lines.append(f"- {line}")

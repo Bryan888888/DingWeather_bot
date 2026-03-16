@@ -167,44 +167,48 @@ def water_ac_advice(temp, humidity, dew):
     efficiency = evap_efficiency(temp, humidity)
     pct, kw = fan_power_advice(temp, humidity)
 
-    # 冬季模式（考虑湿度限制）
+    # ===== 冬季模式 =====
     if temp <= 10:
 
         if humidity >= 75:
-           return (
-            "风量：小（或关闭）\n"
-            "水量：关\n"
-            "外窗：小（或关闭）\n"
-            "内窗：大\n"
-            f"原因：外部湿度过高，蒸发加湿会导致湿度累积，喷淋必须关闭；风机功率建议：{pct}%（约{kw}kW）"
-           )
+            return (
+                "风量：小（或关闭）\n"
+                "水量：关\n"
+                "外窗：小（或关闭）\n"
+                "内窗：大\n"
+                f"原因：外部湿度过高，蒸发加湿会导致湿度累积；风机功率建议：{pct}%（约{kw}kW）"
+            )
 
-    return (
-        "风量：小（或关闭）\n"
-        "水量：小（或关闭）\n"
-        "外窗：小（或关闭）\n"
-        "内窗：大\n"
-        f"原因：外部空气干燥，利用设备余热循环加湿；风机功率建议：{pct}%（约{kw}kW）"
-    )
+        else:
+            return (
+                "风量：小\n"
+                "水量：小\n"
+                "外窗：小\n"
+                "内窗：大\n"
+                f"原因：冬季空气干燥，可利用余热循环加湿；风机功率建议：{pct}%（约{kw}kW）"
+            )
 
+    # ===== 高湿度保护 =====
     if humidity >= 80 or dew >= 26:
         return (
             "风量：大\n"
             "水量：关\n"
             "外窗：小\n"
             "内窗：大\n"
-            f"原因：空气湿度高，喷淋必须关闭；风机功率建议：{pct}%（约{kw}kW）"
+            f"原因：空气湿度过高，喷淋必须关闭防止结露；风机功率建议：{pct}%（约{kw}kW）"
         )
 
+    # ===== 蒸发效率高 =====
     if efficiency == "高":
         return (
             "风量：高\n"
             "水量：高\n"
             "外窗：开\n"
             "内窗：小\n"
-            f"原因：蒸发效率高；风机功率建议：{pct}%（约{kw}kW）"
+            f"原因：蒸发效率高，适合最大制冷；风机功率建议：{pct}%（约{kw}kW）"
         )
 
+    # ===== 蒸发效率中 =====
     if efficiency == "中":
         return (
             "风量：高\n"
@@ -214,6 +218,7 @@ def water_ac_advice(temp, humidity, dew):
             f"原因：蒸发效率一般；风机功率建议：{pct}%（约{kw}kW）"
         )
 
+    # ===== 蒸发效率低 =====
     return (
         "风量：中\n"
         "水量：小\n"
@@ -222,21 +227,20 @@ def water_ac_advice(temp, humidity, dew):
         f"原因：蒸发效率较低；风机功率建议：{pct}%（约{kw}kW）"
     )
 
-
 def floor_vent_advice(temp):
 
     temp = float(temp)
 
     if temp >= 30:
         return (
-            "模式：排热（设备热量通过地排或管道排出）\n"
+            "模式：排热(设备热量通过地排或管道排出)\n"
             "地排：开\n"
             "热风窗：开\n"
         )
 
     if temp <= 10:
         return (
-            "模式：循环（热空气进入水帘房加湿后回送车间）\n"
+            "模式：循环(热空气进入水帘房加湿后回送车间)\n"
             "地排：开\n"
             "热风窗：关\n"
         )

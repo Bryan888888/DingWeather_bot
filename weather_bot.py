@@ -280,9 +280,8 @@ def build_message(now_data, future_hours, alert_data, air_quality_data):
         lines.append("------")
     
     else:
-        lines.append("🌞无天气预警")
+        lines.append("无天气预警🌞")
         
-    return "\n".join(lines)
     lines.append("------")
     
     # 空调建议
@@ -301,7 +300,6 @@ def build_message(now_data, future_hours, alert_data, air_quality_data):
         lines.append(f"- {line}")
 
     return "\n".join(lines)
-
 
 def sign_request(timestamp, secret):
 

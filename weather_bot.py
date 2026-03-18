@@ -277,12 +277,10 @@ def build_message(now_data, future_hours, alert_data, air_quality_data):
         for a in alerts:
             desc = a.get("text", "").replace('\n', ' ')
             lines.append(f"- {desc}")
-        lines.append("------")
-    
+        lines.append("---")
     else:
-        lines.append("无天气预警🌞")
-        
-    lines.append("------")
+        lines.append("无天气预警 🌞")
+    lines.append("---")
     
     # 空调建议
     ac_advice = water_ac_advice(temp, humidity, dew)
